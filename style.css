@@ -36,3 +36,7 @@ body {
     background-color: #fff;
   }
   
+  .card {
+    background-color: #343a40; /* Set dark background for cards */
+    color: white; /* Text color for cards */
+  }
