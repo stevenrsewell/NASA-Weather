@@ -18,9 +18,31 @@ async function getWeather() {
       const sunriseTime = new Date(currentWeatherData.sys.sunrise * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       const sunsetTime = new Date(currentWeatherData.sys.sunset * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-      const temperatureInfo = document.createElement('p');
-      temperatureInfo.textContent = `Current Weather: ${currentWeatherData.weather[0].description}, ${temperature}${unit}<br>Sunrise: ${sunriseTime}, Sunset: ${sunsetTime}`;
-      weatherInfoDiv.appendChild(temperatureInfo);
+      const cardContainer = document.createElement('div');
+      cardContainer.classList.add('card', 'text-center');
+
+      const cardBody = document.createElement('div');
+      cardBody.classList.add('card-body');
+
+      const cardTitle = document.createElement('h5');
+      cardTitle.classList.add('card-title');
+      cardTitle.textContent = 'Today\'s Weather Forecast';
+
+      const weatherIcon = document.createElement('img');
+      const iconCode = currentWeatherData.weather[0].icon;
+      weatherIcon.src = `https://openweathermap.org/img/wn/${iconCode}.png`;
+      weatherIcon.classList.add('weather-icon');
+
+      const cardText = document.createElement('p');
+      cardText.classList.add('card-text');
+      cardText.innerHTML = `<strong>Current Weather:</strong> ${currentWeatherData.weather[0].description}, ${temperature}${unit}<br><strong>Sunrise:</strong> ${sunriseTime}<br><strong>Sunset:</strong> ${sunsetTime}`;
+
+      cardBody.appendChild(cardTitle);
+      cardBody.appendChild(weatherIcon);
+      cardBody.appendChild(cardText);
+      cardContainer.appendChild(cardBody);
+
+      weatherInfoDiv.appendChild(cardContainer);
     } else {
       throw new Error('Invalid data received from the weather API');
     }
@@ -41,27 +63,37 @@ async function getWeather() {
 
     // Create Bootstrap cards for the next 5 days' forecast
     const cardContainer = document.createElement('div');
-    cardContainer.classList.add('row', 'justify-content-start', 'gy-4');
+    cardContainer.classList.add('card-container', 'w-100'); // Add card container class
 
     // Display high and low temperatures for each day
     Object.keys(dailyForecasts).slice(0, 5).forEach(date => {
       const dailyData = dailyForecasts[date];
       const highTemp = Math.round(Math.max(...dailyData.map(entry => entry.main.temp_max)));
       const lowTemp = Math.round(Math.min(...dailyData.map(entry => entry.main.temp_min)));
+      const forecastDate = new Date(dailyData[0].dt * 1000);
 
       const card = document.createElement('div');
-      card.classList.add('col-12', 'col-md-4');
+      card.classList.add('forecast-card', 'card', 'text-center'); // Add forecast card class
 
       const cardBody = document.createElement('div');
-      cardBody.classList.add('card', 'text-center', 'h-100');
+      cardBody.classList.add('card-body');
 
-      const cardTitle = document.createElement('h5');
+      const dayOfWeek = document.createElement('h5'); // Change to h5 for day of the week
+      dayOfWeek.classList.add('card-day');
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      dayOfWeek.textContent = days[forecastDate.getDay()];
+
+      const cardTitle = document.createElement('p'); // Change to p for date
       cardTitle.classList.add('card-title');
-      cardTitle.textContent = new Date(dailyData[0].dt * 1000).toLocaleDateString();
+      const formattedDate = `${forecastDate.getMonth() + 1}/${forecastDate.getDate()}`;
+      cardTitle.textContent = formattedDate;
+
+      const weatherDescription = dailyData[0].weather[0].description;
+      const formattedWeather = weatherDescription.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
       const cardText = document.createElement('p');
       cardText.classList.add('card-text');
-      cardText.innerHTML = `<strong>Weather:</strong> ${dailyData[0].weather[0].description}<br><strong>High:</strong> ${highTemp}°F<br><strong>Low:</strong> ${lowTemp}°F`;
+      cardText.innerHTML = `<strong>${formattedWeather}</strong><br><strong>High:</strong> ${highTemp}°F<br><strong>Low:</strong> ${lowTemp}°F`;
 
       const weatherIconContainer = document.createElement('div');
       weatherIconContainer.classList.add('d-flex', 'justify-content-center');
@@ -69,8 +101,9 @@ async function getWeather() {
       const weatherIcon = document.createElement('img');
       const iconCode = dailyData[0].weather[0].icon;
       weatherIcon.src = `https://openweathermap.org/img/wn/${iconCode}.png`;
-      
+
       weatherIconContainer.appendChild(weatherIcon);
+      cardBody.appendChild(dayOfWeek);
       cardBody.appendChild(cardTitle);
       cardBody.appendChild(weatherIconContainer);
       cardBody.appendChild(cardText);

@@ -1,42 +1,76 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f3f3f3;
-  }
-  
-  .container {
-    text-align: center;
-  }
-  
-  input[type="text"] {
-    padding: 8px;
-    margin: 10px;
-  }
-  
-  button {
-    padding: 8px 16px;
-    cursor: pointer;
-    background-color: #007bff;
-    color: white;
-    border: none;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  
-  #weatherInfo {
-    margin-top: 20px;
-    padding: 20px;
-    background-color: #fff;
-  }
-  
-  .card {
-    background-color: #343a40; /* Set dark background for cards */
-    color: white; /* Text color for cards */
-  }
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  background-color: #f3f3f3;
+}
+
+.container {
+  text-align: center;
+}
+
+.zipcode-container {
+  margin-bottom: 20px;
+}
+
+input[type="text"] {
+  padding: 8px;
+  margin: 10px;
+}
+
+button {
+  padding: 8px 16px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  border: none;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+#weatherInfo,
+#fiveDayForecast {
+  width: 100%;
+}
+
+.card {
+  background-color: rgba(52, 58, 64, 0.8);
+  color: white;
+  border: none;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.card:hover {
+  opacity: 0.9;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.forecast-card {
+  width: calc(20% - 10px);
+  margin-bottom: 20px;
+}
+
+.card-day {
+  margin-bottom: 8px;
+}
+
+.weather-icon {
+  width: 50px;
+  height: 50px;
+}
