@@ -6,15 +6,20 @@ body {
   justify-content: center;
   align-items: flex-start;
   min-height: 100vh;
-  background-color: #f3f3f3;
+  background: #f3f3f3 url('') fixed center/cover no-repeat;
 }
 
 .container {
   text-align: center;
 }
 
+.card:hover, .forecast-card:hover {
+  opacity: 0.9;
+  transition: opacity 0.3s ease-in-out;
+}
+
 .zipcode-container {
-  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 input[type="text"] {
@@ -44,10 +49,6 @@ button:hover {
   color: white;
   border: none;
   transition: opacity 0.3s ease-in-out;
-}
-
-.card:hover {
-  opacity: 0.9;
 }
 
 .card-body {

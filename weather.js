@@ -1,6 +1,6 @@
 async function getWeather() {
   const zipCode = document.getElementById('zipCodeInput').value;
-  const apiKey = '6000229ba681c93b80335817e159fb87'; // Replace with your actual API key
+  const apiKey = '6000229ba681c93b80335817e159fb87';
   const weatherInfoDiv = document.getElementById('weatherInfo');
 
   // Clear previous weather information
@@ -66,7 +66,7 @@ async function getWeather() {
     const cardContainer = document.createElement('div');
     cardContainer.classList.add('card-container', 'w-100');
 
-    const delays = [100, 150, 200, 250, 300]; // Delays for the 5-day forecast cards
+    const aosDelays = [100, 150, 200, 250, 300]; // AOS transition delays for the 5-day forecast cards
 
     Object.keys(dailyForecasts).slice(0, 5).forEach((date, index) => {
       const dailyData = dailyForecasts[date];
@@ -77,7 +77,7 @@ async function getWeather() {
       const card = document.createElement('div');
       card.classList.add('forecast-card', 'card', 'text-center', 'aos-init');
       card.setAttribute('data-aos', 'fade-up');
-      card.setAttribute('data-aos-delay', `${delays[index]}`); // Set delay for each card
+      card.setAttribute('data-aos-delay', `${aosDelays[index]}`); // Set AOS transition delay
 
       const cardBody = document.createElement('div');
       cardBody.classList.add('card-body');
@@ -117,8 +117,28 @@ async function getWeather() {
 
     weatherInfoDiv.appendChild(cardContainer);
 
-    AOS.init(); // Initialize AOS
-    AOS.refresh(); // Refresh AOS after adding new elements
+    // Initialize AOS
+    AOS.init();
+    AOS.refresh();
+
+    // Function to add hover effect to forecast cards
+    function addHoverEffect() {
+      // Add event listeners for hover effect to the forecast cards
+      const forecastCards = document.querySelectorAll('.forecast-card');
+
+      forecastCards.forEach(card => {
+        card.addEventListener('mouseover', () => {
+          card.style.opacity = '0.9';
+        });
+
+        card.addEventListener('mouseout', () => {
+          card.style.opacity = '';
+        });
+      });
+    }
+
+    // Add hover effect to the forecast cards after elements are added
+    addHoverEffect();
 
   } catch (error) {
     console.error('Error fetching weather data:', error);
