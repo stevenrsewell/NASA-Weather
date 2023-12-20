@@ -18,8 +18,9 @@ async function getWeather() {
       const sunriseTime = new Date(currentWeatherData.sys.sunrise * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       const sunsetTime = new Date(currentWeatherData.sys.sunset * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-      const cardContainer = document.createElement('div');
-      cardContainer.classList.add('card', 'text-center');
+      const todayCard = document.createElement('div');
+      todayCard.classList.add('card', 'text-center', 'aos-init');
+      todayCard.setAttribute('data-aos', 'flip-up');
 
       const cardBody = document.createElement('div');
       cardBody.classList.add('card-body');
@@ -40,9 +41,9 @@ async function getWeather() {
       cardBody.appendChild(cardTitle);
       cardBody.appendChild(weatherIcon);
       cardBody.appendChild(cardText);
-      cardContainer.appendChild(cardBody);
+      todayCard.appendChild(cardBody);
 
-      weatherInfoDiv.appendChild(cardContainer);
+      weatherInfoDiv.appendChild(todayCard);
     } else {
       throw new Error('Invalid data received from the weather API');
     }
@@ -63,27 +64,30 @@ async function getWeather() {
 
     // Create Bootstrap cards for the next 5 days' forecast
     const cardContainer = document.createElement('div');
-    cardContainer.classList.add('card-container', 'w-100'); // Add card container class
+    cardContainer.classList.add('card-container', 'w-100');
 
-    // Display high and low temperatures for each day
-    Object.keys(dailyForecasts).slice(0, 5).forEach(date => {
+    const delays = [100, 150, 200, 250, 300]; // Delays for the 5-day forecast cards
+
+    Object.keys(dailyForecasts).slice(0, 5).forEach((date, index) => {
       const dailyData = dailyForecasts[date];
       const highTemp = Math.round(Math.max(...dailyData.map(entry => entry.main.temp_max)));
       const lowTemp = Math.round(Math.min(...dailyData.map(entry => entry.main.temp_min)));
       const forecastDate = new Date(dailyData[0].dt * 1000);
 
       const card = document.createElement('div');
-      card.classList.add('forecast-card', 'card', 'text-center'); // Add forecast card class
+      card.classList.add('forecast-card', 'card', 'text-center', 'aos-init');
+      card.setAttribute('data-aos', 'fade-up');
+      card.setAttribute('data-aos-delay', `${delays[index]}`); // Set delay for each card
 
       const cardBody = document.createElement('div');
       cardBody.classList.add('card-body');
 
-      const dayOfWeek = document.createElement('h5'); // Change to h5 for day of the week
+      const dayOfWeek = document.createElement('h5');
       dayOfWeek.classList.add('card-day');
       const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
       dayOfWeek.textContent = days[forecastDate.getDay()];
 
-      const cardTitle = document.createElement('p'); // Change to p for date
+      const cardTitle = document.createElement('p');
       cardTitle.classList.add('card-title');
       const formattedDate = `${forecastDate.getMonth() + 1}/${forecastDate.getDate()}`;
       cardTitle.textContent = formattedDate;
@@ -112,6 +116,9 @@ async function getWeather() {
     });
 
     weatherInfoDiv.appendChild(cardContainer);
+
+    AOS.init(); // Initialize AOS
+    AOS.refresh(); // Refresh AOS after adding new elements
 
   } catch (error) {
     console.error('Error fetching weather data:', error);
