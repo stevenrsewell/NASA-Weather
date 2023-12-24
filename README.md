@@ -2,7 +2,7 @@
 A weather dashboard app that allows the user to input a zip code and will display current weather and a 5-day forecast. NASA Astronomy Image of the Day is used as the background image and changes daily.
 
 ## Live Web Address
-[https://stevenrsewell.github.io/Weather-App-NASA/](https://stevenrsewell.github.io/Weather-App-NASA/)
+[https://stevenrsewell.github.io/Weather-App/](https://stevenrsewell.github.io/Weather-App/)
 
 ## Technologies Used
 + HTML / CSS
