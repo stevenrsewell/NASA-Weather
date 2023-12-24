@@ -15,9 +15,9 @@ async function getWeather() {
     if (currentWeatherData.weather && currentWeatherData.weather.length > 0 && currentWeatherData.main) {
       const temperature = Math.round(currentWeatherData.main.temp);
       const unit = '°F';
-      const sunriseTime = new Date(currentWeatherData.sys.sunrise * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      const sunsetTime = new Date(currentWeatherData.sys.sunset * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
+      const sunriseTime = new Date(currentWeatherData.sys.sunrise * 1000).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }).replace(/^0/, '');
+      const sunsetTime = new Date(currentWeatherData.sys.sunset * 1000).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }).replace(/^0/, '');
+      
       const todayCard = document.createElement('div');
       todayCard.classList.add('card', 'text-center', 'aos-init');
       todayCard.setAttribute('data-aos', 'flip-up');
@@ -36,7 +36,12 @@ async function getWeather() {
 
       const cardText = document.createElement('p');
       cardText.classList.add('card-text');
-      cardText.innerHTML = `<strong>Current Weather:</strong> ${currentWeatherData.weather[0].description}, ${temperature}${unit}<br><strong>Sunrise:</strong> ${sunriseTime}<br><strong>Sunset:</strong> ${sunsetTime}`;
+      
+      const weatherDescription = currentWeatherData.weather[0].description;
+      const formattedWeather = weatherDescription.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+      
+      cardText.innerHTML = `<strong>Current Weather:</strong> ${formattedWeather}, ${temperature}${unit}<br><strong>Sunrise:</strong> ${sunriseTime}<br><strong>Sunset:</strong> ${sunsetTime}`;
+      
 
       cardBody.appendChild(cardTitle);
       cardBody.appendChild(weatherIcon);
@@ -119,26 +124,7 @@ async function getWeather() {
 
     // Initialize AOS
     AOS.init();
-    AOS.refresh();
-
-    // Function to add hover effect to forecast cards
-    function addHoverEffect() {
-      // Add event listeners for hover effect to the forecast cards
-      const forecastCards = document.querySelectorAll('.forecast-card');
-
-      forecastCards.forEach(card => {
-        card.addEventListener('mouseover', () => {
-          card.style.opacity = '0.9';
-        });
-
-        card.addEventListener('mouseout', () => {
-          card.style.opacity = '';
-        });
-      });
-    }
-
-    // Add hover effect to the forecast cards after elements are added
-    addHoverEffect();
+    AOS.refresh()
 
   } catch (error) {
     console.error('Error fetching weather data:', error);
